@@ -1,14 +1,16 @@
+
+
+server:
+    servlet:
+        context-path: /
+    port: 8888
 spring:
-    
-    datasource:
-#        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql://47.93.246.239:3306/redseft?useUnicode=true&amp;characterEncoding=UTF-8&amp;useOldAliasMetadataBehavior=true&useSSL=false
-        username: root
-        password: redSoft!123
-        type: com.alibaba.druid.pool.DruidDataSource
+    profiles:
+        active: dev
         
-    
-    
+        
+
+        
 mybatis:
     typeAliasesPackage: cn.ff.burning
     mapperLocations: classpath:mapper/*.xml
