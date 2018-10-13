@@ -8,6 +8,20 @@ spring:
         username: root
         password: redSoft!123
         type: com.alibaba.druid.pool.DruidDataSource
+        
+
+        
+
+        
+security:
+    jwt-header: Authorization
+    jwt-prefix: Bearer
+    jwt-secret: hadManyMoney
+    jwt-expiration: 30000
+    un-check-url:
+        - /noAuth/**
+        - /authorize/*
+    authentication-url: /authorize/login
 
 
 

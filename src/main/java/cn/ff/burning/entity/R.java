@@ -58,5 +58,9 @@ public class R {
         Gson gson = new GsonBuilder().setDateFormat(format).create();
         return gson.toJson(this);
     }
+    public String asJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 
 }
