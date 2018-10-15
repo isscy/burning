@@ -21,7 +21,7 @@ import java.io.IOException;
 /**
  * @deprecated
  */
-@Component
+//@Component
 public class JwtAuthorizationTokenFilter extends OncePerRequestFilter {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

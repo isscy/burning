@@ -11,8 +11,14 @@ spring:
         
 
         
-mybatis:
-    typeAliasesPackage: cn.ff.burning
-    mapperLocations: classpath:mapper/*.xml
+#mybatis:
+#    typeAliasesPackage: cn.ff.burning.entity
+#    mapperLocations: classpath*:mapper/*.xml
+#    configuration:
+#        map-underscore-to-camel-case: true
+
+mybatis-plus:
+    typeAliasesPackage: cn.ff.burning.entity
+    mapperLocations: classpath*:mapper/*.xml
     configuration:
         map-underscore-to-camel-case: true

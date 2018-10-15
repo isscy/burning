@@ -36,7 +36,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             throw new AuthMethodNotSupportedException("登陆仅支持POST方法和Ajax请求");
         }
         String username = request.getParameter("username");
-        SysUser user = new ObjectMapper().readValue(request.getInputStream(), SysUser.class);
+//        SysUser user = new ObjectMapper().readValue(request.getInputStream(), SysUser.class);
+        SysUser user = new ObjectMapper().readValue(request.getReader(), SysUser.class);
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
     }
 

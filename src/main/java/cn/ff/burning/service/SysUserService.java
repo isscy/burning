@@ -20,4 +20,10 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
         return sysUserMapper.selectList(null);
     }
 
+    public SysUser getByName(String userName){
+        return sysUserMapper.getByUserName(userName);
+
+    }
+
+
 }
