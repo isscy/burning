@@ -56,8 +56,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .userDetailsService(userDetailsService)
-                .passwordEncoder(new BCryptPasswordEncoder());
+            .userDetailsService(userDetailsService)
+            .passwordEncoder(new BCryptPasswordEncoder());
 
     }
 
@@ -68,22 +68,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()// 不创建session
                 .authorizeRequests()
-                /*.antMatchers(securityProperties.unCheckUrlArray()).permitAll()
-                .anyRequest().authenticated()*/
-                .and()
-                .authorizeRequests()
-                .antMatchers("/**")
-                .permitAll()
+                //.antMatchers(securityProperties.unCheckUrlArray()).permitAll() //配在这里无效 需要放在WebSecurity里
+                .anyRequest().authenticated()
 
-//                .anyRequest()
-//                .authenticated() // Protected API End-points
         .and()
                 .addFilterBefore(new GlobalCorsFilter(), ChannelProcessingFilter.class)
-                .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrl(), authenticationManager()), UsernamePasswordAuthenticationFilter.class);
-                //.addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrl(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
         //.addFilterBefore(JwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers(securityProperties.unCheckUrlArray());
+    }
+
 
 
 }
