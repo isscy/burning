@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +45,7 @@ public class TokenAuthenticationService {
      * JWT 生成方法
      */
     public static void addAuthentication(HttpServletResponse response, String username) {
-        addAuthentication(response, username, null);
+        addAuthentication(response, username, new HashMap<>());
     }
     public static void addAuthentication(HttpServletResponse response, String username, Map<String, Object> claims) {
         //生成jwt
@@ -52,7 +53,7 @@ public class TokenAuthenticationService {
                 //.claim("authorities", "ROLE_ADMIN,ROLE_ADMIN")//保存权限（角色）
                 .setClaims(claims) //todo 处理角色
                 .setSubject(username)//用户名写入标题
-                .setExpiration(new Date(System.currentTimeMillis() + tokenAuthenticationService.securityProperties.getJwtExpiration()))
+                .setExpiration(new Date(System.currentTimeMillis() + tokenAuthenticationService.securityProperties.getJwtExpiration() * 1000))
                 .signWith(SignatureAlgorithm.HS512, tokenAuthenticationService.securityProperties.getJwtSecret())// 签名设置
                 .compact();
         // 将jwt写入body

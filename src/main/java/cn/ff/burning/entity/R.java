@@ -34,6 +34,7 @@ public class R {
     public R(Object data) {
         this.data = data;
     }
+    public R(){}
 
     public R success(){
         this.code = 1;
@@ -43,6 +44,11 @@ public class R {
     public R fail(){
         this.code = 0;
         return this;
+    }
+    public R fail(String msg){
+        this.message = msg;
+        return this.fail();
+
     }
     public R status(int code){
         if (code == 1)

@@ -65,18 +65,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity security) throws Exception {
         security
                 .csrf().disable()
-                //.exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint).and()
                 //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()// 不创建session
-                .authorizeRequests()
+                //.authorizeRequests()
                 //.antMatchers(securityProperties.unCheckUrlArray()).permitAll() //配在这里无效 需要放在WebSecurity里
-                .anyRequest().authenticated()
+                //.anyRequest().authenticated()
 
-        .and()
+        //.and()
                 .addFilterBefore(new GlobalCorsFilter(), ChannelProcessingFilter.class)
+                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrl(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        //.addFilterBefore(JwtAuthorizationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        .authorizeRequests()
+                .anyRequest().authenticated();
     }
 
     @Override

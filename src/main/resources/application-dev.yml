@@ -17,10 +17,11 @@ security:
     jwt-header: Authorization
     jwt-prefix: Bearer
     jwt-secret: hadManyMoney
-    jwt-expiration: 30000
+    jwt-expiration: 300 # 5 min
     un-check-url:
         - /noAuth/**
-        - /authorize/*
+#        - /authorize/*
+        - /error
     authentication-url: /authorize/login
 
 

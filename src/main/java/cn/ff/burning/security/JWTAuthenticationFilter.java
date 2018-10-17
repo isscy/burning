@@ -33,9 +33,12 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
             /*res.setStatus(200);
             RequestDispatcher dispatcher = request.getRequestDispatcher("/backmanage/indexInSys");
             dispatcher.forward(request, res);*/
-            resp.setStatus(HttpStatus.UNAUTHORIZED.value());
+
+            /*resp.setStatus(HttpStatus.UNAUTHORIZED.value());
             resp.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
-            resp.getOutputStream().println(new R(0, "not certified", null).asJson());
+            resp.getOutputStream().println(new R(0, "not certified", null).asJson());*/
+            SecurityContextHolder.getContext().setAuthentication(null);
+            filterChain.doFilter(request, response);
         }
 
 
