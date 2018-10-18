@@ -1,6 +1,7 @@
 package cn.ff.burning.security;
 
 import cn.ff.burning.entity.R;
+import cn.ff.burning.entity.SysUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -49,13 +50,7 @@ public class TokenAuthenticationService {
     }
     public static void addAuthentication(HttpServletResponse response, String username, Map<String, Object> claims) {
         //生成jwt
-        String jwt = Jwts.builder()
-                //.claim("authorities", "ROLE_ADMIN,ROLE_ADMIN")//保存权限（角色）
-                .setClaims(claims) //todo 处理角色
-                .setSubject(username)//用户名写入标题
-                .setExpiration(new Date(System.currentTimeMillis() + tokenAuthenticationService.securityProperties.getJwtExpiration() * 1000))
-                .signWith(SignatureAlgorithm.HS512, tokenAuthenticationService.securityProperties.getJwtSecret())// 签名设置
-                .compact();
+        String jwt = createJwtToken(username, claims);
         // 将jwt写入body
         try {
             response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -67,6 +62,19 @@ public class TokenAuthenticationService {
 
 
     }
+
+    public static String createJwtToken(String username, Map<String, Object> claims){
+        String jwt = Jwts.builder()
+                //.claim("authorities", "ROLE_ADMIN,ROLE_ADMIN")//保存权限（角色）
+                .setClaims(claims) //todo 处理角色
+                .setSubject(username)//用户名写入标题
+                .setExpiration(new Date(System.currentTimeMillis() + tokenAuthenticationService.securityProperties.getJwtExpiration() * 1000))
+                .signWith(SignatureAlgorithm.HS512, tokenAuthenticationService.securityProperties.getJwtSecret())// 签名设置
+                .compact();
+        return jwt;
+    }
+
+
 
     /**
      * jwt 验证方法
@@ -83,6 +91,22 @@ public class TokenAuthenticationService {
             List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
             return user != null ?
                     new UsernamePasswordAuthenticationToken(user, null, authorities) : null;
+
+        }
+        return null;
+    }
+    /**
+     * token 转 user
+     */
+    public static String parsrToUserId(HttpServletRequest request){
+
+        String token = request.getHeader(tokenAuthenticationService.securityProperties.getJwtHeader());//从header中拿到token
+        if (token != null) {// 解析token
+            Claims claims = Jwts.parser()
+                    .setSigningKey(tokenAuthenticationService.securityProperties.getJwtSecret())
+                    .parseClaimsJws(token.replace(tokenAuthenticationService.securityProperties.getJwtPrefix(), ""))
+                    .getBody();
+            return (String)claims.get("userId");
 
         }
         return null;
