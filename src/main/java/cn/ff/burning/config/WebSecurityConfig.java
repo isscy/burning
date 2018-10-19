@@ -6,6 +6,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
+import org.springframework.security.access.vote.AuthenticatedVoter;
+import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,7 +22,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -56,8 +64,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-            .userDetailsService(userDetailsService)
-            .passwordEncoder(new BCryptPasswordEncoder());
+                .userDetailsService(userDetailsService)
+                .passwordEncoder(new BCryptPasswordEncoder());
 
     }
 
@@ -71,13 +79,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.antMatchers(securityProperties.unCheckUrlArray()).permitAll() //配在这里无效 需要放在WebSecurity里
                 //.anyRequest().authenticated()
 
-        //.and()
+                //.and()
                 .addFilterBefore(new GlobalCorsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrl(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 
-        .authorizeRequests()
-                .anyRequest().authenticated();
+                .authorizeRequests()
+                .anyRequest().authenticated()
+                .accessDecisionManager(accessDecisionManager());
     }
 
     @Override
@@ -85,6 +94,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(securityProperties.unCheckUrlArray());
     }
 
+
+    @Bean
+    public AccessDecisionManager accessDecisionManager() {
+        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
+            new WebExpressionVoter(),
+//                new RoleBasedVoter(),
+            new AuthenticatedVoter());
+        return new UnanimousBased(decisionVoters);
+    }
 
 
 }
