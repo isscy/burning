@@ -11,6 +11,7 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.AuthenticatedVoter;
 import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +24,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
@@ -40,8 +43,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService userDetailsService;
     @Autowired
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
-//    @Autowired
-//    private JwtAuthorizationTokenFilter JwtAuthorizationTokenFilter;
+
+    @Autowired
+    private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSourceImpl;
 
     /*
     @Autowired
@@ -86,7 +90,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests()
                 .anyRequest().authenticated()
-                .accessDecisionManager(accessDecisionManager());
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    public <O extends FilterSecurityInterceptor> O postProcess(
+                            O fsi) {
+                        fsi.setSecurityMetadataSource(mySecurityMetadataSource());
+                        fsi.setAccessDecisionManager(myAccessDecisionManager());
+                        return fsi;
+                    }
+                });
     }
 
     @Override
@@ -96,12 +107,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public AccessDecisionManager accessDecisionManager() {
-        List<AccessDecisionVoter<? extends Object>> decisionVoters = Arrays.asList(
-            new WebExpressionVoter(),
-//                new RoleBasedVoter(),
-            new AuthenticatedVoter());
-        return new UnanimousBased(decisionVoters);
+    public FilterInvocationSecurityMetadataSource mySecurityMetadataSource() {
+        FilterInvocationSecurityMetadataSourceImpl securityMetadataSource = new FilterInvocationSecurityMetadataSourceImpl();
+        return securityMetadataSource;
+    }
+
+    @Bean
+    public AccessDecisionManager myAccessDecisionManager() {
+        return new AccessDecisionManagerImpl();
     }
 
 
