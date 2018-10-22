@@ -2,6 +2,8 @@ package cn.ff.burning.security;
 
 import cn.ff.burning.entity.R;
 import io.jsonwebtoken.JwtException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -18,7 +20,7 @@ import java.io.IOException;
  * @author ff 20181018
  */
 public class JWTAuthenticationFilter extends GenericFilterBean {
-
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
@@ -33,6 +35,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(null);
             filterChain.doFilter(request, response);
         }catch (JwtException e){
+            logger.error(e.getMessage() );
             //resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             SecurityContextHolder.getContext().setAuthentication(null);
             filterChain.doFilter(request, response);

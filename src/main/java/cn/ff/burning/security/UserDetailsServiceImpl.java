@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -18,6 +19,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         SysUser user = sysUserMapper.getByUserName(username);
         if (user == null)
             throw new UsernameNotFoundException("用户 "+username+" 找不到");
+        user.setRoles(sysUserMapper.getOneUserAllRoles(user.getId()));
         return user;
     }
 }

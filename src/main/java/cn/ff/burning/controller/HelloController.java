@@ -2,6 +2,7 @@ package cn.ff.burning.controller;
 
 import cn.ff.burning.entity.R;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
@@ -20,6 +21,14 @@ public class HelloController {
         Map<String, String> map = new HashMap<>();
         map.put("user", "dot");
         map.put("info", "你好哇");
+        return new R(map).success();
+    }
+
+    @GetMapping("/goo/{name}")
+    public R goo(@PathVariable String name){
+        Map<String, String> map = new HashMap<>();
+        map.put("user", name);
+        map.put("info", "goooo");
         return new R(map).success();
     }
 

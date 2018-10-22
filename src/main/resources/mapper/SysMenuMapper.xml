@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.ff.burning.mapper.SysMenuMapper">
+    <resultMap id="BaseResultMap" type="cn.ff.burning.entity.SysMenu">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="menu_name" property="menuName" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="url" property="url" jdbcType="VARCHAR"/>
+        <result column="visible" property="visible" jdbcType="VARCHAR"/>
+        <result column="order_num" property="orderNum" jdbcType="INTEGER"/>
+        <result column="perms" property="perms" jdbcType="VARCHAR"/>
+        <result column="icon" property="icon" jdbcType="VARCHAR"/>
+        <result column="create_by" property="createBy" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, type, menu_name, parent_id, level, url, visible, order_num, perms, icon, create_by,
+        create_time
+    </sql>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_menu
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        delete
+        from sys_menu
+        where id = #{id,jdbcType=VARCHAR}
+    </delete>
+    <insert id="insert" parameterType="cn.ff.burning.entity.SysMenu">
+        insert into sys_menu (id,
+                              type,
+                              menu_name,
+                              parent_id,
+                              level,
+                              url,
+                              visible,
+                              order_num,
+                              perms,
+                              icon,
+                              create_by,
+                              create_time)
+        values (#{id,jdbcType=VARCHAR},
+                #{type,jdbcType=VARCHAR},
+                #{menuName,jdbcType=VARCHAR},
+                #{parentId,jdbcType=VARCHAR},
+                #{level,jdbcType=INTEGER},
+                #{url,jdbcType=VARCHAR},
+                #{visible,jdbcType=VARCHAR},
+                #{orderNum,jdbcType=INTEGER},
+                #{perms,jdbcType=VARCHAR},
+                #{icon,jdbcType=VARCHAR},
+                #{createBy,jdbcType=VARCHAR},
+                #{createTime,jdbcType=TIMESTAMP})
+    </insert>
+    <insert id="insertSelective" parameterType="cn.ff.burning.entity.SysMenu">
+        insert into sys_menu
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="menuName != null">
+                menu_name,
+            </if>
+            <if test="parentId != null">
+                parent_id,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="visible != null">
+                visible,
+            </if>
+            <if test="orderNum != null">
+                order_num,
+            </if>
+            <if test="perms != null">
+                perms,
+            </if>
+            <if test="icon != null">
+                icon,
+            </if>
+            <if test="createBy != null">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="menuName != null">
+                #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                #{level,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                #{visible,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                #{orderNum,jdbcType=INTEGER},
+            </if>
+            <if test="perms != null">
+                #{perms,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="cn.ff.burning.entity.SysMenu">
+        update sys_menu
+        <set>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="menuName != null">
+                menu_name = #{menuName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=INTEGER},
+            </if>
+            <if test="url != null">
+                url = #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="visible != null">
+                visible = #{visible,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum,jdbcType=INTEGER},
+            </if>
+            <if test="perms != null">
+                perms = #{perms,jdbcType=VARCHAR},
+            </if>
+            <if test="icon != null">
+                icon = #{icon,jdbcType=VARCHAR},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="cn.ff.burning.entity.SysMenu">
+        update sys_menu
+        set type        = #{type,jdbcType=VARCHAR},
+            menu_name   = #{menuName,jdbcType=VARCHAR},
+            parent_id   = #{parentId,jdbcType=VARCHAR},
+            level       = #{level,jdbcType=INTEGER},
+            url         = #{url,jdbcType=VARCHAR},
+            visible     = #{visible,jdbcType=VARCHAR},
+            order_num   = #{orderNum,jdbcType=INTEGER},
+            perms       = #{perms,jdbcType=VARCHAR},
+            icon        = #{icon,jdbcType=VARCHAR},
+            create_by   = #{createBy,jdbcType=VARCHAR},
+            create_time = #{createTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <select id="getAllAuthority" resultType="cn.ff.burning.entity.BaseKv">
+        select m.url as `key`,r.code as value from sys_menu m left join sys_role_menu rm on m.id = rm.menu_id
+          left join sys_role r on rm.role_id = r.id
+        where m.url is not null and m.url != ''
+
+    </select>
+</mapper>
