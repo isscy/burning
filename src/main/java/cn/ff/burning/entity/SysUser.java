@@ -31,6 +31,16 @@ public class SysUser implements UserDetails {
     private LocalDateTime createTime;
     private String delFlag;
 
+
+    private String idCard;
+    private String email;
+    private String sex; // 0 未知 1男 2女
+    private String provice;
+    private String city;
+    private String county;
+    private String address;
+    private String school;
+
     private List<SysRole> roles;
 
 

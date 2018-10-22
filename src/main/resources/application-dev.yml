@@ -22,7 +22,9 @@ security:
         - /noAuth/**
 #        - /authorize/*
         - /error
-    authentication-url: /authorize/login
+    authentication-url-password: /authorize/login/password
+    authentication-url-mobile: /authorize/login/mobile
+    authentication-url-idcard: /authorize/login/idcard
 
 
 

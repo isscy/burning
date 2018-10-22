@@ -1,6 +1,7 @@
 package cn.ff.burning.config;
 
 import cn.ff.burning.security.*;
+import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -47,6 +48,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSourceImpl;
 
+
+
     /*
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -86,14 +89,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.and()
                 .addFilterBefore(new GlobalCorsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrl(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrlPassword(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeRequests()
                 .anyRequest().authenticated()
                 .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
                     public <O extends FilterSecurityInterceptor> O postProcess(
                             O fsi) {
-                        fsi.setSecurityMetadataSource(mySecurityMetadataSource());
+                        fsi.setSecurityMetadataSource(filterInvocationSecurityMetadataSourceImpl);
                         fsi.setAccessDecisionManager(myAccessDecisionManager());
                         return fsi;
                     }
@@ -106,11 +109,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    @Bean
+    /*@Bean
     public FilterInvocationSecurityMetadataSource mySecurityMetadataSource() {
         FilterInvocationSecurityMetadataSourceImpl securityMetadataSource = new FilterInvocationSecurityMetadataSourceImpl();
         return securityMetadataSource;
-    }
+    }*/
 
     @Bean
     public AccessDecisionManager myAccessDecisionManager() {

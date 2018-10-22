@@ -4,7 +4,6 @@ import cn.ff.burning.entity.R;
 import cn.ff.burning.entity.SysUser;
 import cn.ff.burning.utils.WebUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;

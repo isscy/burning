@@ -18,7 +18,9 @@ public class SecurityProperties {
     private String jwtPrefix;
     private String jwtSecret;
     private long jwtExpiration;
-    private String authenticationUrl; // 登陆url
+    private String authenticationUrlPassword; // 登陆url - 密码登陆
+    private String authenticationUrlMobile; // 登陆url - 手机号登陆
+    private String authenticationUrlIdcard; // 登陆url - 身份证登陆
     private List<String> unCheckUrl;
 
     public String[] unCheckUrlArray() {
