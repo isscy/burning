@@ -12,6 +12,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     SysUser getByUserName(String userName);
 
+
     /**
      * 获取一个用户的所有角色
      */

@@ -37,8 +37,8 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
                 return entry.getValue();//return SecurityConfig.createList(entry.getValue());
             }
         }
-        //return null;
-        return SecurityConfig.createList("ROLE_USER");//没有匹配到,默认是要登录才能访问
+//        return null;
+        return SecurityConfig.createList("ROLE_FULLY");//没有匹配到,默认是要登录才能访问
 
 
 

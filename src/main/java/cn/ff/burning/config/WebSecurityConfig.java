@@ -1,36 +1,29 @@
 package cn.ff.burning.config;
 
 import cn.ff.burning.security.*;
-import org.checkerframework.checker.units.qual.A;
+import cn.ff.burning.security.handler.AuthenticationSuccessHandlerImpl;
+import cn.ff.burning.security.sms.SmsCodeAuthenticationSecurityConfig;
+import cn.ff.burning.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDecisionManager;
-import org.springframework.security.access.AccessDecisionVoter;
-import org.springframework.security.access.vote.AuthenticatedVoter;
-import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.channel.ChannelProcessingFilter;
-import org.springframework.security.web.access.expression.WebExpressionVoter;
-import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -43,30 +36,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
+    private SysUserService sysUserService;
+    @Autowired
     private UnauthorizedEntryPoint unauthorizedEntryPoint;
-
+    @Autowired
+    private SmsCodeAuthenticationSecurityConfig smsCodeAuthenticationSecurityConfig;
+    @Autowired
+    private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
+    private AuthenticationSuccessHandlerImpl authenticationSuccessHandler;
     @Autowired
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSourceImpl;
 
-
-
-    /*
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoderBean());
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoderBean() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManager() throws Exception {
-        return super.authenticationManagerBean();
-    }*/
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -87,9 +68,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //.anyRequest().authenticated()
 
                 //.and()
+                .apply(smsCodeAuthenticationSecurityConfig)
+                .and()
                 .addFilterBefore(new GlobalCorsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterBefore(new JWTLoginFilter(securityProperties.getAuthenticationUrlPassword(), authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jWTLoginFilter(), UsernamePasswordAuthenticationFilter.class)
 
                 .authorizeRequests()
                 .anyRequest().authenticated()
@@ -108,12 +91,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers(securityProperties.unCheckUrlArray());
     }
 
-
-    /*@Bean
-    public FilterInvocationSecurityMetadataSource mySecurityMetadataSource() {
-        FilterInvocationSecurityMetadataSourceImpl securityMetadataSource = new FilterInvocationSecurityMetadataSourceImpl();
-        return securityMetadataSource;
-    }*/
+    @Bean
+    public JWTLoginFilter jWTLoginFilter() throws Exception {
+        JWTLoginFilter jwtLoginFilter = new JWTLoginFilter(securityProperties.getAuthenticationUrlPassword(), authenticationManager(), sysUserService);
+        jwtLoginFilter.setAuthenticationFailureHandler(authenticationFailureHandler);
+        jwtLoginFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler);
+        return jwtLoginFilter;
+    }
 
     @Bean
     public AccessDecisionManager myAccessDecisionManager() {

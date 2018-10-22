@@ -2,6 +2,7 @@ package cn.ff.burning.security;
 
 import cn.ff.burning.entity.R;
 import cn.ff.burning.entity.SysUser;
+import cn.ff.burning.service.SysUserService;
 import cn.ff.burning.utils.WebUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpMethod;
@@ -10,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 
 import javax.servlet.FilterChain;
@@ -27,10 +29,12 @@ import java.util.Map;
  * @author ff 20181013
  */
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
+    private final SysUserService sysUserService;
 
-    public JWTLoginFilter(String url, AuthenticationManager authManager) {
+    public JWTLoginFilter(String url, AuthenticationManager authManager, SysUserService sysUserService) {
         super(url);
         setAuthenticationManager(authManager);
+        this.sysUserService = sysUserService;
     }
 
     @Override
@@ -40,10 +44,12 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         }
 //        SysUser user = new ObjectMapper().readValue(request.getInputStream(), SysUser.class);
         SysUser user = new ObjectMapper().readValue(request.getReader(), SysUser.class);
+        if (!sysUserService.isUserTypeCorrect(user))
+            throw new AuthMethodNotSupportedException("当前用户无法在登陆端登陆");
         return getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
     }
 
-    @Override
+    /*@Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication auth) throws IOException, ServletException {
         String browser = request.getHeader("User-Agent") != null ? request.getHeader("User-Agent") : "";
         String ip = request.getRemoteAddr();
@@ -75,7 +81,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setStatus(HttpServletResponse.SC_OK);
 //        response.getOutputStream().println(new R(500, "Login Error!" + failed.getMessage(), null).asJson());
         response.getOutputStream().write(new R(500, "Login Error!" + failed.getMessage(), null).asJson().getBytes(StandardCharsets.UTF_8));
-    }
+    }*/
 
 
 }

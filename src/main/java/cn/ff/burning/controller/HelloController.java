@@ -32,4 +32,12 @@ public class HelloController {
         return new R(map).success();
     }
 
+    @GetMapping("/qwer")
+    public R qwer(){
+        Map<String, String> map = new HashMap<>();
+        map.put("qwer", "放进技能");
+        map.put("info", "heroooooooo");
+        return new R(map).success();
+    }
+
 }

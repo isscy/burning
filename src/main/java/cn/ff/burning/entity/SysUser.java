@@ -43,6 +43,8 @@ public class SysUser implements UserDetails {
 
     private List<SysRole> roles;
 
+    private String loginSource; // 登陆来源
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

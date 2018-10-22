@@ -25,6 +25,13 @@ security:
     authentication-url-password: /authorize/login/password
     authentication-url-mobile: /authorize/login/mobile
     authentication-url-idcard: /authorize/login/idcard
+    
+    loginsource-web: OxDE6x1LNzG42tJ4ZGVLi0hURR
+    loginsource-bgm: $2a$10$MhbAAOPMyOdubhQ7b55
 
 
 
+
+logging:
+    level:
+        cn.ff: debug
