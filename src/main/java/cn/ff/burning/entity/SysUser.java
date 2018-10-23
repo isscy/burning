@@ -1,11 +1,8 @@
 package cn.ff.burning.entity;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
+import cn.ff.burning.utils.BaseUtil;
 import com.google.common.base.Joiner;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +25,7 @@ public class SysUser implements UserDetails {
     private String phone;
     private String status; // 1-正常；2-lock;
     private String type;    // 0 通用 1 前端用户 2后台管理用户
-    private LocalDateTime createTime;
+    private Date createTime;
     private String delFlag;
 
 
@@ -44,6 +41,21 @@ public class SysUser implements UserDetails {
     private List<SysRole> roles;
 
     private String loginSource; // 登陆来源
+
+
+    public SysUser(){}
+    public SysUser(boolean isFed, String userName){
+        this.userName = userName;
+        if (isFed){ // 前端注册的用户
+            this.id = BaseUtil.getUUID();
+            this.phone = userName;
+            this.status = "1";
+            this.type = "1";
+            this.createTime = new Date();
+            this.delFlag = "0";
+            this.sex = "0";
+        }
+    }
 
 
     @Override

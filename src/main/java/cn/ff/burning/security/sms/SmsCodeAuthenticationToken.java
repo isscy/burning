@@ -1,9 +1,11 @@
 package cn.ff.burning.security.sms;
 
+import cn.ff.burning.constant.BaseConstant;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * 短信登录验证信息封装类
@@ -14,9 +16,22 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
 
     private final Object principal;  // 这是手机号啊
+    public String credentials;         // 这是你验证码
 
     /**
      * SmsCodeAuthenticationFilter中构建的未认证的Authentication
+     */
+    public SmsCodeAuthenticationToken(Map<String, String> map) {
+        super(null);
+        String mobile = map.get(BaseConstant.DEFAULT_PARAMETER_NAME_MOBILE);
+        this.principal = mobile == null ? "" : mobile.trim();
+        credentials = map.get(BaseConstant.DEFAULT_PARAMETER_NAME_CKCODE);
+        setAuthenticated(false);
+    }
+
+    /**
+     * SmsCodeAuthenticationFilter中构建的未认证的Authentication
+     * @deprecated
      */
     public SmsCodeAuthenticationToken(String mobile) {
         super(null);
@@ -35,7 +50,7 @@ public class SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     @Override
     public Object getCredentials() {
-        return null;
+        return credentials;
     }
 
     @Override

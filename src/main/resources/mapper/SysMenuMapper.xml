@@ -19,161 +19,7 @@
         id, type, menu_name, parent_id, level, url, visible, order_num, perms, icon, create_by,
         create_time
     </sql>
-    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String">
-        select
-        <include refid="Base_Column_List"/>
-        from sys_menu
-        where id = #{id,jdbcType=VARCHAR}
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-        delete
-        from sys_menu
-        where id = #{id,jdbcType=VARCHAR}
-    </delete>
-    <insert id="insert" parameterType="cn.ff.burning.entity.SysMenu">
-        insert into sys_menu (id,
-                              type,
-                              menu_name,
-                              parent_id,
-                              level,
-                              url,
-                              visible,
-                              order_num,
-                              perms,
-                              icon,
-                              create_by,
-                              create_time)
-        values (#{id,jdbcType=VARCHAR},
-                #{type,jdbcType=VARCHAR},
-                #{menuName,jdbcType=VARCHAR},
-                #{parentId,jdbcType=VARCHAR},
-                #{level,jdbcType=INTEGER},
-                #{url,jdbcType=VARCHAR},
-                #{visible,jdbcType=VARCHAR},
-                #{orderNum,jdbcType=INTEGER},
-                #{perms,jdbcType=VARCHAR},
-                #{icon,jdbcType=VARCHAR},
-                #{createBy,jdbcType=VARCHAR},
-                #{createTime,jdbcType=TIMESTAMP})
-    </insert>
-    <insert id="insertSelective" parameterType="cn.ff.burning.entity.SysMenu">
-        insert into sys_menu
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                id,
-            </if>
-            <if test="type != null">
-                type,
-            </if>
-            <if test="menuName != null">
-                menu_name,
-            </if>
-            <if test="parentId != null">
-                parent_id,
-            </if>
-            <if test="level != null">
-                level,
-            </if>
-            <if test="url != null">
-                url,
-            </if>
-            <if test="visible != null">
-                visible,
-            </if>
-            <if test="orderNum != null">
-                order_num,
-            </if>
-            <if test="perms != null">
-                perms,
-            </if>
-            <if test="icon != null">
-                icon,
-            </if>
-            <if test="createBy != null">
-                create_by,
-            </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
-                #{id,jdbcType=VARCHAR},
-            </if>
-            <if test="type != null">
-                #{type,jdbcType=VARCHAR},
-            </if>
-            <if test="menuName != null">
-                #{menuName,jdbcType=VARCHAR},
-            </if>
-            <if test="parentId != null">
-                #{parentId,jdbcType=VARCHAR},
-            </if>
-            <if test="level != null">
-                #{level,jdbcType=INTEGER},
-            </if>
-            <if test="url != null">
-                #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="visible != null">
-                #{visible,jdbcType=VARCHAR},
-            </if>
-            <if test="orderNum != null">
-                #{orderNum,jdbcType=INTEGER},
-            </if>
-            <if test="perms != null">
-                #{perms,jdbcType=VARCHAR},
-            </if>
-            <if test="icon != null">
-                #{icon,jdbcType=VARCHAR},
-            </if>
-            <if test="createBy != null">
-                #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </trim>
-    </insert>
-    <update id="updateByPrimaryKeySelective" parameterType="cn.ff.burning.entity.SysMenu">
-        update sys_menu
-        <set>
-            <if test="type != null">
-                type = #{type,jdbcType=VARCHAR},
-            </if>
-            <if test="menuName != null">
-                menu_name = #{menuName,jdbcType=VARCHAR},
-            </if>
-            <if test="parentId != null">
-                parent_id = #{parentId,jdbcType=VARCHAR},
-            </if>
-            <if test="level != null">
-                level = #{level,jdbcType=INTEGER},
-            </if>
-            <if test="url != null">
-                url = #{url,jdbcType=VARCHAR},
-            </if>
-            <if test="visible != null">
-                visible = #{visible,jdbcType=VARCHAR},
-            </if>
-            <if test="orderNum != null">
-                order_num = #{orderNum,jdbcType=INTEGER},
-            </if>
-            <if test="perms != null">
-                perms = #{perms,jdbcType=VARCHAR},
-            </if>
-            <if test="icon != null">
-                icon = #{icon,jdbcType=VARCHAR},
-            </if>
-            <if test="createBy != null">
-                create_by = #{createBy,jdbcType=VARCHAR},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
-            </if>
-        </set>
-        where id = #{id,jdbcType=VARCHAR}
-    </update>
+
     <update id="updateByPrimaryKey" parameterType="cn.ff.burning.entity.SysMenu">
         update sys_menu
         set type        = #{type,jdbcType=VARCHAR},
@@ -191,9 +37,24 @@
     </update>
 
     <select id="getAllAuthority" resultType="cn.ff.burning.entity.BaseKv">
-        select m.url as `key`,r.code as value from sys_menu m left join sys_role_menu rm on m.id = rm.menu_id
-          left join sys_role r on rm.role_id = r.id
-        where m.url is not null and m.url != ''
+        select m.url as `key`, r.code as value
+        from sys_menu m
+                 left join sys_role_menu rm on m.id = rm.menu_id
+                 left join sys_role r on rm.role_id = r.id
+        where m.url is not null
+          and m.url != ''
+
+    </select>
+
+    <select id="getUrlAndRole" resultType="cn.ff.burning.entity.SysMenu">
+        select
+            m.url, GROUP_CONCAT(r.code SEPARATOR ',') as ofRoles
+        from
+            sys_menu m
+        left join sys_role_menu rm on m.id = rm.menu_id
+        left join sys_role r on rm.role_id = r.id
+        where m.visible = '0'
+        GROUP BY m.url
 
     </select>
 </mapper>

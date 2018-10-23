@@ -27,7 +27,7 @@ public class SecurityProperties {
     private List<String> unCheckUrl;
 
 
-    public String DEFAULT_PARAMETER_NAME_MOBILE = "mobile";
+    //public String DEFAULT_PARAMETER_NAME_MOBILE = "mobile";
 
     public String[] unCheckUrlArray() {
         String[] arr = new String[unCheckUrl.size()];

@@ -9,17 +9,13 @@ import java.util.List;
 
 @Repository
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
-    int deleteByPrimaryKey(String id);
 
-    int insert(SysMenu record);
-
-    int insertSelective(SysMenu record);
-
-    SysMenu selectByPrimaryKey(String id);
-
-    int updateByPrimaryKeySelective(SysMenu record);
-
-    int updateByPrimaryKey(SysMenu record);
 
     List<BaseKv> getAllAuthority();
+
+
+    /**
+     * 获取所有目录和菜单及其角色
+     */
+    List<SysMenu> getUrlAndRole();
 }

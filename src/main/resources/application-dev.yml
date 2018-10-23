@@ -8,11 +8,18 @@ spring:
         username: root
         password: redSoft!123
         type: com.alibaba.druid.pool.DruidDataSource
-        
+    redis:
+        database: 3
+        host: 47.92.192.78
+        port: 6379
+        password: redSoft_Java18&hrp
+#        timeout:
 
-        
 
-        
+
+
+
+
 security:
     jwt-header: Authorization
     jwt-prefix: Bearer
@@ -34,4 +41,11 @@ security:
 
 logging:
     level:
-        cn.ff: debug
+        cn.ff.burining.mapper: debug
+
+aliyun:
+    mns:
+        access-key-id: LTAIJMDwpxNMqxUk
+        access-key-secret: BbP00DXKfHH4vG2XkUt4AgCPKZVkYm
+        sign-name: 中科冠融科技有限公司
+

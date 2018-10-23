@@ -101,6 +101,11 @@
             <artifactId>guava</artifactId>
             <version>26.0-jre</version>
         </dependency>
+        <dependency>
+            <groupId>cn.redsoft.aliyun</groupId>
+            <artifactId>springboot-aliyun-mns-starter</artifactId>
+            <version>1.0.5.RELEASE</version>
+        </dependency>
 
 
 
@@ -108,7 +113,7 @@
 
     <build>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
@@ -121,9 +126,9 @@
                     <overwrite>true</overwrite>
                     <verbose>true</verbose>
                 </configuration>
-            </plugin>
+            </plugin>-->
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>2.3.2</version>
@@ -140,7 +145,7 @@
                         <bootclasspath>${java.home}/lib/rt.jar:${java.home}/lib/jce.jar</bootclasspath>
                     </compilerArguments>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 

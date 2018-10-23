@@ -29,5 +29,10 @@ public class SysMenu {
 
     private Date createTime;
 
+    /**
+     * 这个菜单能被那些角色使用 逗号隔开的角色code字符串
+     */
+    private String ofRoles;
+
 
 }
