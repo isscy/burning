@@ -6,9 +6,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement
+/*@EnableTransactionManagement
 @SpringBootApplication
-@MapperScan("cn.ff.burning")
+@MapperScan("cn.ff.burning")*/
 public class BurningApplication {
 
     public static void main(String[] args) {

@@ -10,7 +10,9 @@ public class SysMenu {
 
     private String type;
 
-    private String menuName;
+    private String name;
+
+    private String title;
 
     private String parentId;
 
@@ -38,6 +40,7 @@ public class SysMenu {
     private List<SysMenu> children = new ArrayList<SysMenu>();
 
     private MenuMeta meta = new MenuMeta();
+
 
 
 }
