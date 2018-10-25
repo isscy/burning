@@ -63,6 +63,8 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
         List<BaseKv> menus = sysMenuMapper.getAllAuthority();
         for (BaseKv kv : menus) {
             Collection<ConfigAttribute> array = new ArrayList<>();
+            if (kv.getValue() == null)
+                continue;
             ConfigAttribute cfg = new SecurityConfig(kv.getValue());
             //此处只添加了用户的名字，其实还可以添加更多权限的信息，例如请求方法到ConfigAttribute的集合中去。此处添加的信息将会作为MyAccessDecisionManager类的decide的第三个参数。
             array.add(cfg);

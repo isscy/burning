@@ -39,7 +39,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
-        if (!HttpMethod.POST.name().equals(request.getMethod()) || !WebUtil.isAjax(request)) {
+        if (!HttpMethod.POST.name().equals(request.getMethod()) /*|| !WebUtil.isAjax(request)*/) {
             throw new AuthMethodNotSupportedException("登陆仅支持POST方法和Ajax请求");
         }
 //        SysUser user = new ObjectMapper().readValue(request.getInputStream(), SysUser.class);

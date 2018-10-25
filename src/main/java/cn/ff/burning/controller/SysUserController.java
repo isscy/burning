@@ -3,6 +3,7 @@ package cn.ff.burning.controller;
 import cn.ff.burning.constant.BaseConstant;
 import cn.ff.burning.entity.R;
 import cn.ff.burning.entity.SysUser;
+import cn.ff.burning.security.TokenAuthenticationService;
 import cn.ff.burning.service.SysUserService;
 import cn.ff.burning.utils.BaseUtil;
 import cn.redsoft.aliyun.mns.bean.AliyunmnsRequest;
@@ -16,6 +17,7 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -26,14 +28,16 @@ public class SysUserController {
     private static final Logger LOGGER = LoggerFactory.getLogger(SysUserController.class);
 
     @Autowired
-    public SysUserController(SysUserService sysUserService, AliyunmnsTemplate aliyunmnsTemplate, RedisTemplate<String, String> redisTemplate) {
+    public SysUserController(SysUserService sysUserService, AliyunmnsTemplate aliyunmnsTemplate, RedisTemplate<String, String> redisTemplate, TokenAuthenticationService tokenAuthenticationService) {
         this.sysUserService = sysUserService;
         this.aliyunmnsTemplate = aliyunmnsTemplate;
         this.redisTemplate = redisTemplate;
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
     private final SysUserService sysUserService;
     private final AliyunmnsTemplate aliyunmnsTemplate;
+    private final TokenAuthenticationService tokenAuthenticationService;
     private final RedisTemplate<String, String> redisTemplate;
 
 
@@ -47,6 +51,23 @@ public class SysUserController {
     public R list(@PathVariable String name) {
         return new R(sysUserService.getByName(name)).success();
     }*/
+
+    /**
+     * 获取用户信息
+     */
+    @GetMapping("sysUser/userInfo")
+    public R userInfo(HttpServletRequest request) {
+        try {
+            String userId = TokenAuthenticationService.parsrToUserId(request);
+            SysUser user = sysUserService.userInfo(userId);
+            if (user == null)
+                throw new Exception("找不到user");
+            return new R(user).success();
+
+        }catch (Exception e){
+            return new R().fail(e.getMessage());
+        }
+    }
 
 
     /**

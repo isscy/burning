@@ -13,3 +13,8 @@ Security          | Spring Security， [JWT](https://github.com/auth0/java-jwt) 
 服务端构建工具       | Maven
 
 ### Database Schema
+
+
+TODOLIST
+切面实现数据范围
+https://gitee.com/y_project/RuoYi/blob/master/ruoyi-framework/src/main/java/com/ruoyi/framework/aspectj/DataScopeAspect.java

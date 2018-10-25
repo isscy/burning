@@ -2,7 +2,8 @@ package cn.ff.burning.entity;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.util.*;
+
 @Data
 public class SysMenu {
     private String id;
@@ -33,6 +34,10 @@ public class SysMenu {
      * 这个菜单能被那些角色使用 逗号隔开的角色code字符串
      */
     private String ofRoles;
+
+    private List<SysMenu> children = new ArrayList<SysMenu>();
+
+    private MenuMeta meta = new MenuMeta();
 
 
 }

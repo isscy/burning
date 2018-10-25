@@ -41,7 +41,7 @@ security:
 
 logging:
     level:
-        cn.ff.burining.mapper: debug
+        cn.ff.burning.mapper: debug
 
 aliyun:
     mns:

@@ -27,6 +27,11 @@ public interface BaseConstant {
     String DEFAULT_PARAMETER_NAME_CKCODE = "ckCode";//请求参数： 验证码
     String DEFAULT_PARAMETER_NAME_SOURCE = "loginSource";//请求参数： 来源
 
+    /**
+     * 超级管理员的用户id
+     */
+    String USER_SUPER_ID = "10000";
+
 
 
 }

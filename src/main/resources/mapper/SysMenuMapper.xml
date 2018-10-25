@@ -57,4 +57,21 @@
         GROUP BY m.url
 
     </select>
+
+
+    <select id="selectMenusByUserId" resultType="cn.ff.burning.entity.SysMenu">
+        select distinct m.* from sys_menu m
+        left join sys_role_menu rm on m.id = rm.menu_id
+        left join sys_role r on r.id = rm.role_id
+        left join sys_user_role ur on rm.role_id = ur.role_id
+        where ur.user_id = #{userId} and m.visible = '0' and m.type in ('M', 'C')
+        order by m.order_num
+    </select>
+    <select id="selectMenuNormalAll" resultType="cn.ff.burning.entity.SysMenu">
+        select distinct m.*, m.menu_name as "meta.title", m.icon as "meta.icon" from sys_menu m
+        where m.visible = '0' and m.type in ('M', 'C')
+        order by m.order_num
+    </select>
+
+
 </mapper>

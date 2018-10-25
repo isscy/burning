@@ -18,4 +18,13 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
      * 获取所有目录和菜单及其角色
      */
     List<SysMenu> getUrlAndRole();
+
+    /**
+     * 根据用户ID查询菜单
+     */
+    List<SysMenu> selectMenusByUserId(String userId);
+    /**
+     * 获取管理员用的所有菜单
+     */
+    List<SysMenu> selectMenuNormalAll();
 }

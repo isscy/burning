@@ -18,5 +18,12 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     List<SysRole> getOneUserAllRoles(String userId);
 
+    /**
+     * 获取用户信息
+     */
+    SysUser getUserInfo(String userId);
+
+
+
 
 }

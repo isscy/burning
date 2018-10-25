@@ -1,6 +1,7 @@
 package cn.ff.burning.service;
 
 import cn.ff.burning.constant.BaseConstant;
+import cn.ff.burning.entity.SysRole;
 import cn.ff.burning.entity.SysUser;
 import cn.ff.burning.mapper.SysUserMapper;
 import cn.ff.burning.security.SecurityProperties;
@@ -37,6 +38,17 @@ public class SysUserService extends ServiceImpl<SysUserMapper, SysUser> {
     public void regist(String phone){
         SysUser user = new SysUser(true, phone);
         sysUserMapper.insert(user);
+
+    }
+
+    /**
+     * 获取用户信息
+     */
+    public SysUser userInfo(String userId){
+        SysUser user = sysUserMapper.getUserInfo(userId);
+        List<SysRole> roles = sysUserMapper.getOneUserAllRoles(userId);
+        user.setRoles(roles);
+        return user;
 
     }
 

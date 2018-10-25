@@ -17,8 +17,13 @@ public class SysMenuController {
 
     @GetMapping("/noAuth/sysMenu/urlAndRole")
     public R allMenuUrlAndRole(){
-
         return new R(sysMenuService.allMenuUrlAndRole()).success();
+
+    }
+
+    @GetMapping("/noAuth/sysMenu/menusByUser")
+    public R menusByUser(String userId){
+        return new R(sysMenuService.menusByUser(userId)).success();
 
     }
 

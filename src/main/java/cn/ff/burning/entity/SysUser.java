@@ -38,9 +38,11 @@ public class SysUser implements UserDetails {
     private String address;
     private String school;
 
-    private List<SysRole> roles;
 
     private String loginSource; // 登陆来源
+
+    private List<SysRole> roles;
+    private String access; // 后台管理系统用的 这个用户所有的角色 逗号隔开
 
 
     public SysUser(){}
