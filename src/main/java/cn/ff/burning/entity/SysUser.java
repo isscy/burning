@@ -3,6 +3,7 @@ package cn.ff.burning.entity;
 import java.util.*;
 
 import cn.ff.burning.utils.BaseUtil;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.common.base.Joiner;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,11 +38,15 @@ public class SysUser implements UserDetails {
     private String county;
     private String address;
     private String school;
+    private Date birthday;
+    private String realName;
+    private String avatar;
 
-
+    @TableField(exist = false)
     private String loginSource; // 登陆来源
-
+    @TableField(exist = false)
     private List<SysRole> roles;
+    @TableField(exist = false)
     private String access; // 后台管理系统用的 这个用户所有的角色 逗号隔开
 
 

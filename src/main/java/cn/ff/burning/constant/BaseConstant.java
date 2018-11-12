@@ -19,6 +19,8 @@ public interface BaseConstant {
     String TEMP_SMS_REGIST = "SMS_147035036";    //注册
     String TEMP_SMS_CONFIRM = "SMS_147035039";    //身份验证
     String TEMP_SMS_PWD = "SMS_147035035";    //修改密码
+    String APPLY_FILL = "SMS_149421561";    //报名审核失败
+    String APPLY_SUCCESS = "SMS_149416306";    //报名审核成功
 
     /**
      * 短信登陆过滤器中

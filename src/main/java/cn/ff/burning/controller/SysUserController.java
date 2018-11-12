@@ -9,6 +9,7 @@ import cn.ff.burning.utils.BaseUtil;
 import cn.redsoft.aliyun.mns.bean.AliyunmnsRequest;
 import cn.redsoft.aliyun.mns.template.AliyunmnsTemplate;
 import com.aliyuncs.exceptions.ClientException;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -41,13 +43,15 @@ public class SysUserController {
     private final RedisTemplate<String, String> redisTemplate;
 
 
-    /*@GetMapping("/list")
-    public R list() {
-        return new R(sysUserService.getList()).success();
+    @GetMapping("/sysUser/list/admin")
+    public R list(@RequestParam(required = false, defaultValue = "1") Integer current, @RequestParam(required = false, defaultValue = "10") Integer size) {
+
+        Page<Map> list = sysUserService.geBacktList(new Page<Map>(current, size));
+        return new R(list).success();
 
     }
 
-    @GetMapping("/name/{name}")
+    /*@GetMapping("/name/{name}")
     public R list(@PathVariable String name) {
         return new R(sysUserService.getByName(name)).success();
     }*/
@@ -64,7 +68,7 @@ public class SysUserController {
                 throw new Exception("找不到user");
             return new R(user).success();
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return new R().fail(e.getMessage());
         }
     }
@@ -81,7 +85,23 @@ public class SysUserController {
         String redisCode = redisTemplate.opsForValue().get(BaseConstant.REDIS_SMS_REGIST + phone);
         if (!ckCode.equals(redisCode))
             return new R().fail("验证码错误！");
-        sysUserService.regist(phone);
+        Map<String, String> map = sysUserService.regist(phone);
+        return new R(map).success();
+
+    }
+
+    /**
+     * 重置密码
+     */
+    @PostMapping("/noAuth/sysUser/rePwd")
+    public R rePwd(@RequestParam String phone, @RequestParam String ckCode, @RequestParam String newPwd) {
+        SysUser user = sysUserService.getByName(phone);
+        if (user == null)
+            return new R().fail("手机号错误！");
+        String redisCode = redisTemplate.opsForValue().get(BaseConstant.REDIS_SMS_PWD + phone);
+        if (!ckCode.equals(redisCode))
+            return new R().fail("验证码错误！");
+        sysUserService.rePwd(user.getId(), newPwd);
         return new R().success();
 
     }
@@ -125,6 +145,26 @@ public class SysUserController {
             return new R().fail("发送短信失败！");
         }
         LOGGER.info("发短信-注册 " + phone + " : " + code);
+        return new R().success();
+    }
+
+    /**
+     * 获取重制密码验证码
+     */
+    @GetMapping("/noAuth/smsCode-rePwd/{phone}")
+    public R rePwdCode(@PathVariable String phone) {
+        SysUser user = sysUserService.getByName(phone);
+        if (user == null || StringUtils.isEmpty(user.getId()))
+            return new R().fail("当前用户无法发起重置密码请求");
+        String code = BaseUtil.getSmsCode(6);
+        try {
+            aliyunmnsTemplate.sendMsg(new AliyunmnsRequest(BaseConstant.TEMP_SMS_PWD, phone).setParam("code", code));
+            redisTemplate.opsForValue().set(BaseConstant.REDIS_SMS_PWD + phone, code, BaseConstant.REDIS_SMS_OUTTIMW, TimeUnit.MINUTES);
+        } catch (ClientException e) {
+            LOGGER.error(e.getMessage());
+            return new R().fail("发送短信失败！");
+        }
+        LOGGER.info("发短信-重置密码 " + phone + " : " + code);
         return new R().success();
     }
 

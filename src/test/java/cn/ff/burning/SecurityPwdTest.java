@@ -13,6 +13,7 @@ public class SecurityPwdTest {
 
         String source = "123456";
         String encode = new BCryptPasswordEncoder().encode(source);
+
         logger.warn(encode);
     }
 }
