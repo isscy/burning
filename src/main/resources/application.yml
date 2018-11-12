@@ -1,5 +1,4 @@
 
-
 server:
     servlet:
         context-path: /
@@ -12,8 +11,6 @@ spring:
             charset: utf-8
             enabled: true
             force: true
-
-
 
 
 #mybatis:
